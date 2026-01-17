@@ -29,10 +29,37 @@
         
         document.getElementById('scorecard').src = cricclubsUrl;
         
-        // Keep webview alive with invisible activity (doesn't reload iframe)
+        // Request Wake Lock to keep CPU active even with screen off
+        let wakeLock = null;
+        
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock acquired');
+                
+                wakeLock.addEventListener('release', () => {
+                    console.log('Wake Lock released');
+                });
+            } catch (err) {
+                console.error('Wake Lock error:', err);
+            }
+        }
+        
+        // Request wake lock
+        requestWakeLock();
+        
+        // Refresh iframe every 10 seconds
         setInterval(function() {
-            console.log('Keep alive ping');
-        }, 1000);
+            const iframe = document.getElementById('scorecard');
+            iframe.src = iframe.src;
+        }, 10000);
+        
+        // Re-request wake lock if page becomes visible again
+        document.addEventListener('visibilitychange', () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
     </script>
 </body>
 </html>
