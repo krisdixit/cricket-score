@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cricket Score</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="scorecard"></iframe>
+    
+    <script>
+        // Get matchId and clubId from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchId = urlParams.get('matchId') || '5732';
+        const clubId = urlParams.get('clubId') || '8936';
+        
+        // Build the CricClubs URL
+        const cricclubsUrl = `https://cricclubs.com/CricClubsLive.do?matchId=${matchId}&clubId=${clubId}`;
+        
+        // Set iframe source
+        document.getElementById('scorecard').src = cricclubsUrl;
+        
+        // Refresh every 5 seconds
+        setInterval(function() {
+            document.getElementById('scorecard').src = cricclubsUrl;
+        }, 5000);
+    </script>
+</body>
+</html>
+```
+
+**How to use it:**
+
+Once hosted on GitHub Pages (let's say at `https://yourusername.github.io/cricket-score/`), you just change the URL parameters:
+
+**For match 5732, club 8936:**
+```
+https://yourusername.github.io/cricket-score/?matchId=5732&clubId=8936
+```
+
+**For a different match (e.g., match 6000, club 9000):**
+```
+https://yourusername.github.io/cricket-score/?matchId=6000&clubId=9000
